@@ -1,0 +1,45 @@
+image: 318552736637.dkr.ecr.us-west-2.amazonaws.com/navify-platform-resource-manager-base-runner-image:1.0.0
+
+default:
+  tags:
+    - k8s-runner
+
+stages:
+  - plan
+  - apply
+
+before_script:
+  - aws sts get-caller-identity
+  - |
+    eval $(aws sts assume-role \
+      --role-arn arn:aws:iam::827204637143:role/cip-job-interviews-runner-assumable-role \
+      --role-session-name=pipeline-${CI_PIPELINE_ID}-job-${CI_JOB_ID} \
+      --query 'join(``, [`export `, `AWS_ACCESS_KEY_ID=`,
+      Credentials.AccessKeyId, ` ; export `, `AWS_SECRET_ACCESS_KEY=`,
+      Credentials.SecretAccessKey, `; export `, `AWS_SESSION_TOKEN=`,
+      Credentials.SessionToken])' \
+      --output text )
+  - aws sts get-caller-identity
+
+tf_plan:
+  stage: plan
+  timeout: 1h
+  script:
+    - terraform init
+    - terraform plan -out=tfplan -input=false
+  artifacts:
+    paths:
+      - ${CI_PROJECT_DIR}/*.tf
+      - ${CI_PROJECT_DIR}/.terraform.lock.hcl
+      - ${CI_PROJECT_DIR}/tfplan
+
+tf_apply:
+  stage: apply
+  needs:
+    - job: tf_plan
+      artifacts: true
+  script:
+    - terraform init -input=false
+    - terraform apply -auto-approve "tfplan"
+  only:
+    - main
