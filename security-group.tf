@@ -1,3 +1,4 @@
+#Security Groups
 resource "aws_security_group" "alb" {
   name   = "${var.resource_name}-alb"
   vpc_id = aws_vpc.main.id
