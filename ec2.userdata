@@ -1,6 +1,6 @@
 #!/bin/bash
 sudo yum update -y
 sudo amazon-linux-extras install nginx1 -y 
-sudo echo "<html><body><h1>Hello Roche!</h1><br><br><h1>- Julien</h1></body></html>" > /usr/share/nginx/html/index.html
+sudo echo "<html><body><h1>Hello and welcome to my GitHub profile!</h1><br><br><h1>- Julien</h1></body></html>" > /usr/share/nginx/html/index.html
 sudo systemctl enable nginx
 sudo systemctl start nginx

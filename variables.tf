@@ -1,7 +1,9 @@
-variable "aws_region" {}
+variable "aws_region" {
+  default = "eu-central-1"
+}
 
 variable "resource_name" {
-  default = "julien-interview"
+  default = "julien-exercices"
 }
 
 variable "instance_type" {

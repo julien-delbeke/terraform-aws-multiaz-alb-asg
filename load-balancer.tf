@@ -1,3 +1,4 @@
+#Load Balancer
 resource "aws_lb" "main" {
   name               = var.resource_name
   internal           = false
