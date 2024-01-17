@@ -31,7 +31,8 @@ resource "aws_internet_gateway" "main" {
 
 # NAT gateway
 resource "aws_eip" "eip_1" {
-  vpc = true
+  domain = "vpc"
+  depends_on = [ aws_internet_gateway.main ]
 }
 
 resource "aws_nat_gateway" "main" {
